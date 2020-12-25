@@ -20,3 +20,7 @@ class ProductUpdate(BaseModel):
     name: Optional[str]
     category: Optional[str]
     quantity: Optional[int]
+
+
+class DeleteStatus(BaseModel):
+    detail: str

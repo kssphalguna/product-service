@@ -6,7 +6,7 @@ from fastapi.params import Depends
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.product.schemas import Product, ProductIn
+from app.product.schemas import Product, ProductIn, DeleteStatus
 from app.product import crud as product_crud
 product_router = APIRouter()
 
@@ -23,7 +23,8 @@ async def get_all_products(
 
 @product_router.post(
     '',
-    response_model=Product
+    response_model=Product,
+    status_code=201
 )
 async def create_product(
         product_in: ProductIn,
@@ -37,3 +38,14 @@ async def create_product(
     )
 
 
+@product_router.delete(
+    '/{external_id}',
+    response_model=DeleteStatus
+)
+async def delete_product(
+        external_id: str,
+        db_session: Session = Depends(get_db),
+):
+    product_to_delete = product_crud.get_product_by_id(db_session=db_session, external_id=external_id)
+    product_crud.delete(db_session=db_session, product_to_delete=product_to_delete)
+    return DeleteStatus(detail="product deleted")

@@ -19,10 +19,15 @@ def get_product_by_id(db_session: Session, external_id):
 
 def get_all(db_session: Session):
     return db_session.query(Product).all()
+#
+#
+# def update(db_session: Session, product_to_update: Product, product_data: dict):
+#     for each in product_data:
+#         setattr(product_to_update, each, product_data[each])
+#     db_session.commit()
+#     return product_to_update
 
 
-def update(db_session: Session, product_to_update: Product, product_data: dict):
-    for each in product_data:
-        setattr(product_to_update, each, product_data[each])
+def delete(db_session: Session, product_to_delete: Product):
+    db_session.delete(product_to_delete)
     db_session.commit()
-    return product_to_update
